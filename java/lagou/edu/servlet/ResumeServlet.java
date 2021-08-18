@@ -12,6 +12,7 @@ import java.lang.reflect.Modifier;
 public class ResumeServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
+        System.out.println("11111111111");
         super.init();
     }
 

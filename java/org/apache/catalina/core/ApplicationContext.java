@@ -789,7 +789,7 @@ public class ApplicationContext implements ServletContext {
                     "applicationContext.invalidFilterName", filterName));
         }
 
-        if (!context.getState().equals(LifecycleState.STARTING_PREP)) {
+        if (!context.getState().equals(LifecycleState.STARTING_PREP)) {  //判断是否是程序刚启动时的状态
             //TODO Spec breaking enhancement to ignore this restriction
             throw new IllegalStateException(
                     sm.getString("applicationContext.addFilter.ise",
@@ -801,7 +801,7 @@ public class ApplicationContext implements ServletContext {
         // Assume a 'complete' FilterRegistration is one that has a class and
         // a name
         if (filterDef == null) {
-            filterDef = new FilterDef();
+            filterDef = new FilterDef();  //将Filter对象放入FilterDef对象中
             filterDef.setFilterName(filterName);
             context.addFilterDef(filterDef);
         } else {
