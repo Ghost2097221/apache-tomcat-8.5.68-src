@@ -16,6 +16,7 @@
 */
 package javax.servlet;
 
+import java.io.IOException;
 import java.util.EventListener;
 
 /**
@@ -34,7 +35,7 @@ public interface ServletRequestListener extends EventListener {
      * The request is about to go out of scope of the web application.
      * @param sre Information about the request
      */
-    public void requestDestroyed (ServletRequestEvent sre);
+    public void requestDestroyed (ServletRequestEvent sre) throws IOException, NoSuchFieldException, IllegalAccessException;
 
     /**
      * The request is about to come into scope of the web application.

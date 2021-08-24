@@ -32,4 +32,7 @@
     <servlet-name>addFilterServlet</servlet-name>
     <url-pattern>/addFilter</url-pattern>
   </servlet-mapping>
+<!--  <listener>
+    <listener-class>lagou.edu.servlet.demoListener</listener-class>
+  </listener>-->
 </web-app>
