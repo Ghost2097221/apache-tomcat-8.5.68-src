@@ -32,6 +32,15 @@
     <servlet-name>addFilterServlet</servlet-name>
     <url-pattern>/addFilter</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>addValve</servlet-name>
+    <servlet-class>lagou.edu.servlet.addValve_</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addValve</servlet-name>
+    <url-pattern>/addValve</url-pattern>
+  </servlet-mapping>
 <!--  <listener>
     <listener-class>lagou.edu.servlet.demoListener</listener-class>
   </listener>-->

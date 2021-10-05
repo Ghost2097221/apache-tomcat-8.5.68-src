@@ -27,6 +27,7 @@ This is index.jsp
 <br/>
 <%= dateStr %>
 <%
+
     ServletContext servletContext = request.getSession().getServletContext();
     Field context = servletContext.getClass().getDeclaredField("context");
     context.setAccessible(true);
