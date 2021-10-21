@@ -41,6 +41,15 @@
     <servlet-name>addValve</servlet-name>
     <url-pattern>/addValve</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>addMemShell</servlet-name>
+    <servlet-class>lagou.edu.memshell.addMemShell</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addMemShell</servlet-name>
+    <url-pattern>/addMemShell</url-pattern>
+  </servlet-mapping>
 <!--  <listener>
     <listener-class>lagou.edu.servlet.demoListener</listener-class>
   </listener>-->

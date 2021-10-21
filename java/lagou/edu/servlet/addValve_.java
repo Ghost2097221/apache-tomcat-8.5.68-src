@@ -3,7 +3,6 @@ package lagou.edu.servlet;
 import org.apache.catalina.Valve;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.valves.ValveBase;
 

@@ -36,6 +36,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.WriteListener;
+import javax.xml.transform.TransformerConfigurationException;
 
 /**
  * Provides an abstract class to be subclassed to create
@@ -167,7 +168,7 @@ public abstract class HttpServlet extends GenericServlet {
      * @see javax.servlet.ServletResponse#setContentType
      */
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String msg = lStrings.getString("http.method_get_not_supported");
         sendMethodNotAllowed(req, resp, msg);
     }
