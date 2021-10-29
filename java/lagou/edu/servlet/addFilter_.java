@@ -49,7 +49,6 @@ public class addFilter_ extends HttpServlet {
             e.printStackTrace();
         }
 
-
         try {
             f = standardCtx.getClass().getDeclaredField("filterConfigs");
         } catch (NoSuchFieldException e) {
