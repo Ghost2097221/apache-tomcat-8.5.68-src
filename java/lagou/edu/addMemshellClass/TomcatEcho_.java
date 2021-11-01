@@ -1,24 +1,16 @@
-package lagou.edu.servlet;
-
 import org.apache.catalina.connector.Connector;
+import org.apache.catalina.connector.Response;
 import org.apache.catalina.core.ApplicationContext;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardService;
 import org.apache.coyote.RequestInfo;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Base64;
 
-public class TomcatEcho extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         org.apache.catalina.connector.Response responsea=null;
+public class TomcatEcho_ {
+    public static org.apache.catalina.connector.Response response=null;
+    public  TomcatEcho_() {
         org.apache.catalina.loader.WebappClassLoaderBase webappClassLoaderBase = (org.apache.catalina.loader.WebappClassLoaderBase) Thread.currentThread().getContextClassLoader();
         StandardContext standardContext = (StandardContext) webappClassLoaderBase.getResources().getContext();
         try {
@@ -49,8 +41,8 @@ public class TomcatEcho extends HttpServlet {
                     for (RequestInfo requestInfo : RequestInfo_list) {
                         org.apache.coyote.Request request1 = (org.apache.coyote.Request )req.get(requestInfo);
                         org.apache.catalina.connector.Request request2 = ( org.apache.catalina.connector.Request)request1.getNote(1);
-                        responsea = request2.getResponse();
-                        String host = request2.getHeader("HOST");
+                        response = request2.getResponse();
+                        String host = request2.getHeader("Host");
                         System.out.println(host);
                     }
                 }
@@ -58,9 +50,5 @@ public class TomcatEcho extends HttpServlet {
         } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
     }
 }

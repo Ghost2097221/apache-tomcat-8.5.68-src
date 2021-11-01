@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Base64;
 
 public class TomcatEcho extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+         org.apache.catalina.connector.Response responsea=null;
         org.apache.catalina.loader.WebappClassLoaderBase webappClassLoaderBase = (org.apache.catalina.loader.WebappClassLoaderBase) Thread.currentThread().getContextClassLoader();
         StandardContext standardContext = (StandardContext) webappClassLoaderBase.getResources().getContext();
-
         try {
             Field context = Class.forName("org.apache.catalina.core.StandardContext").getDeclaredField("context");
             context.setAccessible(true);
@@ -32,17 +33,11 @@ public class TomcatEcho extends HttpServlet {
             Connector[] connector = (Connector[])connectors.get(standardService);
             Field protocolHandler = Class.forName("org.apache.catalina.connector.Connector").getDeclaredField("protocolHandler");
             protocolHandler.setAccessible(true);
-//            AbstractProtocol abstractProtocol = (AbstractProtocol)protocolHandler.get(connector[0]);
-
-
             Class<?>[] AbstractProtocol_list = Class.forName("org.apache.coyote.AbstractProtocol").getDeclaredClasses();
-
             for (Class<?> aClass : AbstractProtocol_list) {
                 if (aClass.getName().length()==52){
-
                     java.lang.reflect.Method getHandlerMethod = org.apache.coyote.AbstractProtocol.class.getDeclaredMethod("getHandler",null);
                     getHandlerMethod.setAccessible(true);
-
                     Field globalField = aClass.getDeclaredField("global");
                     globalField.setAccessible(true);
                     org.apache.coyote.RequestGroupInfo requestGroupInfo = (org.apache.coyote.RequestGroupInfo) globalField.get(getHandlerMethod.invoke(connector[0].getProtocolHandler(), null));
@@ -52,28 +47,17 @@ public class TomcatEcho extends HttpServlet {
                     Field req = Class.forName("org.apache.coyote.RequestInfo").getDeclaredField("req");
                     req.setAccessible(true);
                     for (RequestInfo requestInfo : RequestInfo_list) {
-
                         org.apache.coyote.Request request1 = (org.apache.coyote.Request )req.get(requestInfo);
-
                         org.apache.catalina.connector.Request request2 = ( org.apache.catalina.connector.Request)request1.getNote(1);
-                        org.apache.catalina.connector.Response response2 = request2.getResponse();
-                        response2.getWriter().write("111");
+                        responsea = request2.getResponse();
+                        String host = request2.getHeader("HOST");
+                        System.out.println(host);
                     }
                 }
             }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
