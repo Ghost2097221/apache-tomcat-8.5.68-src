@@ -41,7 +41,7 @@
     <servlet-name>addValve</servlet-name>
     <url-pattern>/addValve</url-pattern>
   </servlet-mapping>
-  
+
   <servlet>
     <servlet-name>stdContext</servlet-name>
     <servlet-class>lagou.edu.stdContext.staContext</servlet-class>
@@ -57,6 +57,14 @@
   <servlet-mapping>
     <servlet-name>tomcatecho</servlet-name>
     <url-pattern>/tomcatecho</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>agentMemShell</servlet-name>
+    <servlet-class>lagou.edu.servlet.agentMemshell</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>agentMemShell</servlet-name>
+    <url-pattern>/agent</url-pattern>
   </servlet-mapping>
 <!--  <listener>
     <listener-class>lagou.edu.servlet.demoListener</listener-class>
