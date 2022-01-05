@@ -894,7 +894,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase
 
     }
 
-
+    //engine组件的初始化，创建一个线程池，这个线程池在engine组件的start阶段使用。
     @Override
     protected void initInternal() throws LifecycleException {
         BlockingQueue<Runnable> startStopQueue = new LinkedBlockingQueue<>();
@@ -929,7 +929,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         if (realm instanceof Lifecycle) {
             ((Lifecycle) realm).start();
         }
-
+        //查找子容器，启动子容器。Host在初始化阶段后哈市不完整的，需要继续封装，把容器关系维护完整。
         // Start our child containers, if any
         Container children[] = findChildren();
         List<Future<Void>> results = new ArrayList<>();

@@ -66,7 +66,13 @@
     <servlet-name>agentMemShell</servlet-name>
     <url-pattern>/agent</url-pattern>
   </servlet-mapping>
-<!--  <listener>
-    <listener-class>lagou.edu.servlet.demoListener</listener-class>
-  </listener>-->
+
+  <servlet>
+    <servlet-name>log4j</servlet-name>
+    <servlet-class>lagou.edu.servlet.log4jRce</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>log4j</servlet-name>
+    <url-pattern>/log4j</url-pattern>
+  </servlet-mapping>
 </web-app>

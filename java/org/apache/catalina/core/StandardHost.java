@@ -817,7 +817,7 @@ public class StandardHost extends ContainerBase implements Host {
                         found = true;
                         break;
                     }
-                }
+                }//此处是获取server.xml定义的阀和基础阀，然后看里面有没有errorValve，没有的话添加一个。
                 if(!found) {
                     Valve valve =
                         (Valve) Class.forName(errorValve).getConstructor().newInstance();
