@@ -12,9 +12,6 @@ public class staContext extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Tomcat6789 a = new Tomcat6789();
-        for (StandardContext std:a.getSTC()) {
-            System.out.println(std);
-        }
     }
 
     @Override

